@@ -163,7 +163,7 @@ void saveCity(const City* city)
 {
 	int i;
 	Garden* garden = city->gardens;
-	FILE* file = fopen(FILENAME,"a");
+	FILE* file = fopen(FILENAME,"w");
 	fprintf(file,"%d\n",city->num_of_gardens);
 	for(i = 0 ; i < city->num_of_gardens ; i++,garden++)
 		saveGarden(file,garden);
