@@ -1,6 +1,6 @@
 
 CC = gcc
-OBJS = main.o utils.o string_utils.o
+OBJS = main.o utils.o child.o garden.o
 EXEC = prog
 COMP_FLAG = -std=c99 -Wall -Werror
 
@@ -10,9 +10,11 @@ $(EXEC) : $(OBJS)
 main.o: main.c utils.o
 	$(CC) -c $(COMP_FLAG) $*.c
 
-utils.o: utils.c string_utils.o
+utils.o: utils.c child.o garden.o
 
-string_utils.o: string_utils.o
+child.o: child.c
+
+garden.o: garden.c
 
 clean:
 	rm -f $(OBJS) $(EXEC)

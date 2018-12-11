@@ -20,31 +20,6 @@ void readCity(City* city)
 	fclose(file);
 }
 
-void readNameFromFile(FILE* file, char* name, int max_size)
-{
-	char* in = calloc(max_size*sizeof(char),1);
-	fgets(in,max_size,file);
-	printf("STRING:%s",in);
-//	name = malloc(strlen(in)*sizeof(char));
-//	strcpy(name,in);
-//	free(in);
-}
-
-void loadGardenFromFile(FILE* file, Garden* garden)
-{
-	int i;
-	get_name_from_file(file,&(garden->name));
-	fscanf(file,"%d %d\n",(int*)&(garden->type),&(garden->num_of_children));
-	garden->children = (Child*)malloc(sizeof(Child)*garden->num_of_children);
-	for(i = 0 ; i < garden->num_of_children ; i++)
-		loadChildFromFile(file,(garden->children + i));
-}
-
-void loadChildFromFile(FILE* file, Child* child)
-{
-	fscanf(file,"%d %d\n",&(child->id),&(child->age));
-}
-
 const char* typeToString(garden_type type)
 {
 	switch(type)
@@ -72,83 +47,11 @@ void showCityGardens(const City* city)
 	}
 }
 
-void printGarden(const Garden* garden)
-{
-	int i;
-	printf("Name: %-11s Type: %-15s %d Children:\n",
-			garden->name,typeToString(garden->type),garden->num_of_children);
-	Child* child = garden->children;
-	for(i = 0 ; i < garden->num_of_children ; i++,child++)
-		printChild(child);
-}
-
-void printChild(const Child* child)
-{
-	printf("ID: %d Age: %d\n",child->id,child->age);
-}
-
-Garden* findGarden(const City* city, char** name, int loop)
-{
-	int i,exist;
-	Garden* garden;
-	char in[GARDEN_NAME_LENGTH] = {0};
-	do{
-		printf("\nGive me the Kindergarten Name:\n");
-		scanf("%s",in);
-		if(name != NULL)
-		{
-			*name = malloc(strlen(in)*sizeof(char));
-			strcpy(*name,in);
-		}
-		garden = city->gardens;
-		if(garden == NULL) return NULL;
-		for(i = 0; i < city->num_of_gardens ; i++, garden++)
-			if(!strcmp(in,garden->name))
-				return garden;
-		printf("\nNo such Kindergarten");
-	}while(loop);
-	return NULL;
-}
-
-Child* findChild(const Garden* garden, int loop)
-{
-	int i,exist,id;
-	Child* child = garden->children;
-	if(garden == NULL || child == NULL) return NULL;
-	do{
-		printf("\nEnter Child ID:\n");
-		scanf("%d",&id);
-		for(i = 0; i < garden->num_of_children ; i++,child++)
-		{
-			if(child->id == id)
-			{
-				return child;
-			}
-		}
-		printf("No Such Child");
-	}while(loop);
-	return NULL;
-}
-
 void showSpecificGardenInCity(const City* city)
 {
 	Garden* garden = findGarden(city,NULL,0);
 	if(garden != NULL)
 		printGarden(garden);
-}
-
-void saveGarden(FILE* file,const Garden* garden)
-{
-	int i;
-	Child* child = garden->children;
-	fprintf(file,"%-11s %d %d\n",garden->name,garden->type,garden->num_of_children);
-	for(i = 0 ; i < garden->num_of_children ; i++,child++)
-		saveChild(file,child);
-}
-
-void saveChild(FILE* file ,const Child* child)
-{
-	fprintf(file,"%d %d\n",child->id,child->age);
 }
 
 void saveCity(const City* city)
@@ -186,34 +89,6 @@ void cityAddGarden(City* city)
 	scanf("%d",&num_child);
 	for(i = 0 ; i < num_child ; i++)
 		addChild(gardens);
-}
-
-void addChild(Garden* garden)
-{
-	int i,id,age,exist;
-	Child* child;
-	if(garden->children != NULL)
-		garden->children = realloc(garden->children,(garden->num_of_children+1)*sizeof(Child));
-	else
-		garden->children = malloc(garden->num_of_children*sizeof(Child));
-	child = garden->children + garden->num_of_children;
-	do{
-		printf("\nID No.:\n");
-		scanf("%d",&id);
-		for(i = 0, exist = 0 ; i < garden->num_of_children ; i++)
-			if((garden->children + i)->id == id)
-			{
-				exist = 1;
-				break;
-			}
-		if(exist)
-			printf("\nThis child is in the Kindergarten\n");
-	}while(exist);
-	garden->num_of_children++;
-	printf("\nAge:\n");
-	scanf("%d",&age);
-	child->age = age;
-	child->id = id;
 }
 
 void addChildToSpecificGardenInCity(City* city)
@@ -259,3 +134,20 @@ void ReleaseCity(City* city)
 	free(city->gardens);
 }
 
+int readNameFromFile(FILE* file, char** name)
+{
+	int i,count;
+	char ch;
+	count = 0;
+	do
+	{
+		ch = fgetc(file);
+		count++;
+	}while(isalpha(ch));
+	*name = (char*)malloc(count*sizeof(char));
+	fseek(file,-count,SEEK_CUR);
+	for(i = 0 ; i < count ; i++)
+		*(*name + i) = fgetc(file);
+	*(*name + count - 1) = 0;
+	return count;
+}
