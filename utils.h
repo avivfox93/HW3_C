@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+#include "string_utils.h"
 
 #define FILENAME "DataFile.txt"
 #define GARDEN_NAME_LENGTH 32

@@ -10,7 +10,9 @@
 void readCity(City* city)
 {
 	int i;
+	ReleaseCity(city);
 	FILE* file = fopen(FILENAME,"r");
+	if(file == NULL)return;
 	fscanf(file,"%d\n",&(city->num_of_gardens));
 	city->gardens = (Garden*)malloc(city->num_of_gardens * sizeof(Garden));
 	for(i = 0 ; i < city->num_of_gardens ; i++)
@@ -20,26 +22,19 @@ void readCity(City* city)
 
 void readNameFromFile(FILE* file, char* name, int max_size)
 {
-	int i;
-	char read;
-	for(i = 0 ; i < GARDEN_NAME_LENGTH ; i++,name++)
-	{
-		read = fgetc(file);
-		*name = read;
-		if(read == ' ' || read == '\n' || read == 0)
-		{
-			*name = 0;
-			return;
-		}
-	}
+	char* in = calloc(max_size*sizeof(char),1);
+	fgets(in,max_size,file);
+	printf("STRING:%s",in);
+//	name = malloc(strlen(in)*sizeof(char));
+//	strcpy(name,in);
+//	free(in);
 }
 
 void loadGardenFromFile(FILE* file, Garden* garden)
 {
 	int i;
-	garden->name = (char*)malloc(sizeof(char) * GARDEN_NAME_LENGTH);
-	readNameFromFile(file, garden->name, GARDEN_NAME_LENGTH);
-	fscanf(file,"%d %d",(int*)&(garden->type),&(garden->num_of_children));
+	get_name_from_file(file,&(garden->name));
+	fscanf(file,"%d %d\n",(int*)&(garden->type),&(garden->num_of_children));
 	garden->children = (Child*)malloc(sizeof(Child)*garden->num_of_children);
 	for(i = 0 ; i < garden->num_of_children ; i++)
 		loadChildFromFile(file,(garden->children + i));
@@ -47,9 +42,7 @@ void loadGardenFromFile(FILE* file, Garden* garden)
 
 void loadChildFromFile(FILE* file, Child* child)
 {
-	char ch;
-	fscanf(file,"%d %d",&(child->id),&(child->age));
-	for(ch = fgetc(file) ; ch != '\n' && ch != 0 ; ch = fgetc(file));
+	fscanf(file,"%d %d\n",&(child->id),&(child->age));
 }
 
 const char* typeToString(garden_type type)
@@ -82,7 +75,7 @@ void showCityGardens(const City* city)
 void printGarden(const Garden* garden)
 {
 	int i;
-	printf("Name: %-11s Type: %-11s %d Children:\n",
+	printf("Name: %-11s Type: %-15s %d Children:\n",
 			garden->name,typeToString(garden->type),garden->num_of_children);
 	Child* child = garden->children;
 	for(i = 0 ; i < garden->num_of_children ; i++,child++)
@@ -98,21 +91,20 @@ Garden* findGarden(const City* city, char** name, int loop)
 {
 	int i,exist;
 	Garden* garden;
-	char* in = malloc(GARDEN_NAME_LENGTH*sizeof(char));
-	if(name != NULL)
-		*name = in;
+	char in[GARDEN_NAME_LENGTH] = {0};
 	do{
 		printf("\nGive me the Kindergarten Name:\n");
 		scanf("%s",in);
+		if(name != NULL)
+		{
+			*name = malloc(strlen(in)*sizeof(char));
+			strcpy(*name,in);
+		}
 		garden = city->gardens;
 		if(garden == NULL) return NULL;
 		for(i = 0; i < city->num_of_gardens ; i++, garden++)
-		{
 			if(!strcmp(in,garden->name))
-			{
 				return garden;
-			}
-		}
 		printf("\nNo such Kindergarten");
 	}while(loop);
 	return NULL;
@@ -257,7 +249,7 @@ void ReleaseCity(City* city)
 {
 	int i,j;
 	Garden* garden = city->gardens;
-	Child* child;
+	if(garden == NULL)return;
 	for(i = 0 ; i < city->num_of_gardens ; i++,garden++)
 	{
 		free(garden->children);
@@ -266,3 +258,4 @@ void ReleaseCity(City* city)
 
 	free(city->gardens);
 }
+

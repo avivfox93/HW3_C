@@ -1,8 +1,8 @@
 
 CC = gcc
-OBJS = main.o utils.o
+OBJS = main.o utils.o string_utils.o
 EXEC = prog
-COMP_FLAG = -std=c99 -Wall -Werror
+COMP_FLAG = -std=c99 -Wall -Werror -g
 
 $(EXEC) : $(OBJS)
 	$(CC) $(OBJS) -o $@
@@ -10,7 +10,9 @@ $(EXEC) : $(OBJS)
 main.o: main.c utils.o
 	$(CC) -c $(COMP_FLAG) $*.c
 
-utils.o: utils.c
+utils.o: utils.c string_utils.o
+
+string_utils.o: string_utils.o
 
 clean:
 	rm -f $(OBJS) $(EXEC)
