@@ -2,7 +2,7 @@
 CC = gcc
 OBJS = main.o utils.o string_utils.o
 EXEC = prog
-COMP_FLAG = -std=c99 -Wall -Werror -g
+COMP_FLAG = -std=c99 -Wall -Werror
 
 $(EXEC) : $(OBJS)
 	$(CC) $(OBJS) -o $@
