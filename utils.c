@@ -37,7 +37,7 @@ const char* typeToString(garden_type type)
 
 void showCityGardens(const City* city)
 {
-	int i,j;
+	int i;
 	Garden* garden = city->gardens;
 	if(garden == NULL) return;
 	for(i = 0 ; i < city->num_of_gardens ; i++,garden++)
@@ -71,7 +71,6 @@ void cityAddGarden(City* city)
 	if(city == NULL)return;
 	Garden* gardens;
 	char* name;
-	garden_type type;
 	do{
 		gardens = findGarden(city,&name,0);
 		if(gardens != NULL)
@@ -122,7 +121,7 @@ int countChova(const City* city)
 
 void ReleaseCity(City* city)
 {
-	int i,j;
+	int i;
 	Garden* garden = city->gardens;
 	if(garden == NULL)return;
 	for(i = 0 ; i < city->num_of_gardens ; i++,garden++)

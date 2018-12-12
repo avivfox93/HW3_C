@@ -14,7 +14,7 @@ void saveChild(FILE* file ,const Child* child)
 
 Child* findChild(const Garden* garden, int loop)
 {
-	int i,exist,id;
+	int i,id;
 	Child* child = garden->children;
 	if(garden == NULL || child == NULL) return NULL;
 	do{
