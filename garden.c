@@ -29,7 +29,7 @@ void printGarden(const Garden* garden)
 
 Garden* findGarden(const City* city, char** name, int loop)
 {
-	int i,exist;
+	int i;
 	Garden* garden;
 	char in[GARDEN_NAME_LENGTH] = {0};
 	do{
@@ -48,6 +48,12 @@ Garden* findGarden(const City* city, char** name, int loop)
 		printf("\nNo such Kindergarten");
 	}while(loop);
 	return NULL;
+}
+
+void ReleaseGarden(Garden* garden)
+{
+	free(garden->children);
+	free(garden->name);
 }
 
 void saveGarden(FILE* file,const Garden* garden)

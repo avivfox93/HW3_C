@@ -18,6 +18,7 @@
 void loadGardenFromFile(FILE*,Garden*);
 void printGarden(const Garden*);
 Garden* findGarden(const City*,char**,int);
+void ReleaseGarden(Garden*);
 void saveGarden(FILE*,const Garden*);
 
 #endif /* GARDEN_H_ */

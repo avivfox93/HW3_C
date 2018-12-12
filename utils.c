@@ -126,11 +126,7 @@ void ReleaseCity(City* city)
 	Garden* garden = city->gardens;
 	if(garden == NULL)return;
 	for(i = 0 ; i < city->num_of_gardens ; i++,garden++)
-	{
-		free(garden->children);
-		free(garden->name);
-	}
-
+		ReleaseGarden(garden);
 	free(city->gardens);
 }
 
