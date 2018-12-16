@@ -31,7 +31,7 @@ Garden* findGarden(const City* city, char** name, int loop)
 {
 	int i;
 	Garden* garden;
-	char in[GARDEN_NAME_LENGTH] = {0};
+	char in[GARDEN_NAME_MAX_INPUT] = {0};
 	do{
 		printf("\nGive me the Kindergarten Name:\n");
 		scanf("%s",in);
@@ -46,7 +46,7 @@ Garden* findGarden(const City* city, char** name, int loop)
 			if(!strcmp(in,garden->name))
 				return garden;
 		printf("\nNo such Kindergarten");
-	}while(loop);
+	}while(loop == LOOP_FOR_RESULT);
 	return NULL;
 }
 

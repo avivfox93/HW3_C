@@ -13,7 +13,10 @@
 #include "utils.h"
 #include "types.h"
 
-#define GARDEN_NAME_LENGTH 32
+#define GARDEN_NAME_MAX_INPUT 32
+
+#define LOOP_FOR_RESULT 1
+#define DONT_LOOP_FOR_RESULT 0
 
 void loadGardenFromFile(FILE*,Garden*);
 void printGarden(const Garden*);

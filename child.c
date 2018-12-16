@@ -28,7 +28,7 @@ Child* findChild(const Garden* garden, int loop)
 			}
 		}
 		printf("No Such Child");
-	}while(loop);
+	}while(loop == LOOP_FOR_RESULT);
 	return NULL;
 }
 

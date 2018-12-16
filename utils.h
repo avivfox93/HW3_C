@@ -18,7 +18,6 @@
 #include "garden.h"
 
 #define FILENAME "DataFile.txt"
-#define GARDEN_NAME_LENGTH 32
 
 void readCity(City*);
 void showCityGardens(const City*);

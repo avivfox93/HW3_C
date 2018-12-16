@@ -49,7 +49,7 @@ void showCityGardens(const City* city)
 
 void showSpecificGardenInCity(const City* city)
 {
-	Garden* garden = findGarden(city,NULL,0);
+	Garden* garden = findGarden(city,NULL,DONT_LOOP_FOR_RESULT);
 	if(garden != NULL)
 		printGarden(garden);
 }
@@ -72,7 +72,7 @@ void cityAddGarden(City* city)
 	Garden* gardens;
 	char* name;
 	do{
-		gardens = findGarden(city,&name,0);
+		gardens = findGarden(city,&name,DONT_LOOP_FOR_RESULT);
 		if(gardens != NULL)
 			printf("\nThis Kindergarten already in list\n");
 	}while(gardens != NULL);
@@ -93,7 +93,7 @@ void cityAddGarden(City* city)
 void addChildToSpecificGardenInCity(City* city)
 {
 	char* name;
-	Garden* garden = findGarden(city,&name,0);
+	Garden* garden = findGarden(city,&name,DONT_LOOP_FOR_RESULT);
 	if(garden == NULL)return;
 	addChild(garden);
 }
@@ -102,9 +102,9 @@ void birthdayToChild(City* city)
 {
 	Child* child;
 	Garden* garden;
-	garden = findGarden(city,NULL,0);
+	garden = findGarden(city,NULL,DONT_LOOP_FOR_RESULT);
 	if(garden == NULL)return;
-	child = findChild(garden,0);
+	child = findChild(garden,DONT_LOOP_FOR_RESULT);
 	if(child == NULL)return;
 	child->age++;
 }
